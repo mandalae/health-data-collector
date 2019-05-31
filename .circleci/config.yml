@@ -38,6 +38,10 @@ jobs:
               at: ./
           # run tests!
           - run: npm test
+          - run:
+              # Install the aws cli - We've already set up the required keys
+              name: Create production build
+              command: rm -rf node_modules && npm install --production
   deploy:
     docker:
       - image: circleci/python:2.7-jessie
@@ -46,13 +50,16 @@ jobs:
       - attach_workspace:
           at: ./
       - run:
+          name: Package up deployment
+          command: zip -r deployment.zip ./*
+      - run:
           # Install the aws cli - We've already set up the required keys
           name: Install awscli
           command: sudo pip install awscli
       - run:
           # Deploy everything from the current directory to an S3 bucket
           name: Deploy to S3
-          command: aws s3 sync ./ s3://health-data-source --delete
+          command: aws s3 cp ./deployment.zip s3://health-data-source
 
 
 # Configure the workflows to only run the deployment on master
