@@ -1,6 +1,12 @@
+const awsConfig = {
+    "accessKeyId": process.env.AWS_ACCESS_KEY_ID,
+    "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+    "region": process.env.AWS_REGION
+}
+
 const fs = require('fs');
 const XmlStream = require('xml-stream');
-const DynamoDB = require('dynamo-node')('eu-west-1', './config/credits.json');
+const DynamoDB = require('dynamo-node')(process.env.AWS_REGION, awsConfig);
 const captureMetric = require('./src/captureMetric');
 const getS3Object = require('./src/getS3Object');
 

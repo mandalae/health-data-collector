@@ -2,7 +2,7 @@ const http = require('http');
 
 module.exports = (postData) => {
     const options = {
-        host: 'ec2-54-246-171-93.eu-west-1.compute.amazonaws.com',
+        host: process.env.INFLUXDB_HOST,
         port: 8086,
         path: '/write?db=workoutData&precision=ms',
         method: 'POST',
